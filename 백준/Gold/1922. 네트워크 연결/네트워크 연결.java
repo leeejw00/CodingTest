@@ -54,7 +54,13 @@ public class Main {
 	}
 
 	static void union(int x, int y) {
-		p[findset(y)] = p[findset(x)];
+		x = findset(x);
+        y = findset(y);
+        
+        if(x < y)
+            p[y] = x;
+        else
+            p[x] = y;
 	}
 
 	static int findset(int x) {
