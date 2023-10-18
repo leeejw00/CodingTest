@@ -1,78 +1,84 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
+
+	static class Node implements Comparable<Node> {
+		int v; // 정점
+		int cost; // 가중치
+
+		public Node(int v, int cost) {
+			this.v = v;
+			this.cost = cost;
+		}
+
+		@Override
+		public int compareTo(Node o) {
+			return this.cost - o.cost;
+		}
+	}
+	
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
-	static int N, M;
-	static int[][] graph;
-	static int[] p;
+	static List<Node>[] graph;
 	
 	public static void main(String[] args) throws IOException {
 		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		
-		p = new int[N+1];
-		for(int i=1; i<=N; i++) {
-			p[i] = i;
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+
+		graph = new ArrayList[N+1];
+		for(int i=0; i<=N; i++) {
+			graph[i] = new ArrayList<Node>();
 		}
 		
-		graph = new int[M][3];
 		for(int i=0; i<M; i++) {
 			st = new StringTokenizer(br.readLine());
-			graph[i][0] = Integer.parseInt(st.nextToken());
-			graph[i][1] = Integer.parseInt(st.nextToken());
-			graph[i][2] = Integer.parseInt(st.nextToken());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
+			
+			graph[a].add(new Node(b, w));
+			graph[b].add(new Node(a, w));
 		}
 		
-		Arrays.sort(graph, new Comparator<int[]>() {
-			@Override
-			public int compare(int[] o1, int[] o2) {
-				return o1[2]- o2[2];
-			}
-		});
+		PriorityQueue<Node> pq = new PriorityQueue<Node>();
+		boolean visited[] = new boolean[N+1];
+		
+		pq.add(new Node(1,0));
 		
 		int pick = 0;
 		int sum = 0;
-		int idx = 0;
-		for(int i=0; i<M; i++) {
-			int x = graph[i][0];
-			int y = graph[i][1];
+		int max = 0;
+		while(!pq.isEmpty()) {
+			Node curr = pq.poll();
 			
-			if(findset(x) != findset(y)) {
-				union(x,y);
-				pick++;
-				sum += graph[i][2];
+			if(visited[curr.v]) continue;
+			
+			visited[curr.v] = true;
+			sum += curr.cost;
+			max = Math.max(max, curr.cost);
+			pick++;
+			
+			if(pick == N) {
+				break;
 			}
-			if(pick == N-1) {
-				idx = i;
-				break; 	
+			
+			//현재 정점에 연결된 노드들 우선순위큐에 삽입
+			for(Node next : graph[curr.v]) {
+				if(!visited[next.v])
+					pq.add(next);
 			}
 		}
-		
-		sum -= graph[idx][2];
+		sum -= max;
 		System.out.println(sum);
 		
-	}
-
-	static void union(int x, int y) {
-		x = findset(x);
-		y = findset(y);
-		if(x < y) {
-			p[y] = x;
-		}else {
-			p[x] = y;
-		}
-	}
-
-	static int findset(int x) {
-		if(x != p[x])
-			p[x] = findset(p[x]);
-		return p[x];
 	}
 }
