@@ -43,7 +43,7 @@ public class Main {
 			 if(visited[board[nr][nc] - 'A']) continue;
 			 
 			 dfs(nr, nc, cnt+1);
-			 visited[board[nr][nc] - 'A'] = false;
 		 }
+		 visited[board[r][c] - 'A'] = false; //백트래킹
 	}
 }
