@@ -25,7 +25,7 @@ public class Main {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        
+
         dfs(0,0);
 
         System.out.println(min);
@@ -42,7 +42,7 @@ public class Main {
                 if(!visited[i][j] && visitCheck(i,j)){
                     visited[i][j] = true;
 
-                    int sumAdded = checkDir(i, j);
+                    int sumAdded = sumCost(i, j);
                     dfs(cnt + 1, sum + sumAdded);
 
                     visitedToFalse(i, j);
@@ -62,7 +62,7 @@ public class Main {
         return true;
     }
 
-    private static int checkDir(int r, int c) {
+    private static int sumCost(int r, int c) {
         int sum = map[r][c];
 
         for(int d=0; d<4; d++){
@@ -87,5 +87,5 @@ public class Main {
             visited[nr][nc] = false;
         }
     }
-    
+
 }
