@@ -37,15 +37,11 @@ public class Main {
 
         // 한번 뽑을 때 가능한 상황에 대한 시도 (1 ~ N)
         for(int i = 1; i <= N; i++) {
-            if(isSelected[i]) continue; // 이미 뽑았으면 넘기기
-
-            // 수 뽑고 체크
+            if(isSelected[i]) continue;
             arr[cnt] = i;
             isSelected[i] = true;
-
-            // 그 다음 뽑기
             seq(cnt+1);
-            isSelected[i] = false; // 재귀 돌고 나왔으면 원상복구
+            isSelected[i] = false;
         }
     }
 }
