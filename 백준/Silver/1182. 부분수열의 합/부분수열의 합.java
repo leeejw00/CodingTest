@@ -4,52 +4,42 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N, S;
-	static int[] arr;
-	static boolean[] sel;
-	static int cnt;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(st.nextToken());
-		S = Integer.parseInt(st.nextToken());
-		
-		arr = new int[N];
-		sel = new boolean[N];
-		
-		st = new StringTokenizer(br.readLine());
-		for(int i=0; i<N; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		cnt = 0;
-		powerset(0);
-		
-		int ans = cnt;
-		if(S==0) {
-			ans = cnt - 1;
-		}
-		System.out.println(ans);
-	}
+    static int N, S, ans;
+    static int[] nums;
+    static boolean[] isSelected;
 
-	static void powerset(int idx) {
-		if(idx == N) {
-			int sum = 0;
-			
-			for(int i=0; i<N; i++) {
-				if(sel[i]) {
-					sum += arr[i];
-				}
-			}
-			if(sum == S) cnt++;
-			return;
-		}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		sel[idx] = true;
-		powerset(idx+1);
-		sel[idx] = false;
-		powerset(idx+1);
-	}
+        N = Integer.parseInt(st.nextToken());
+        S = Integer.parseInt(st.nextToken());
+        nums = new int[N];
+        isSelected = new boolean[N];
+
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0; i < N; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
+        }
+        
+        subset(0);
+        System.out.println(S==0? ans-1: ans);
+    }
+
+    private static void subset(int cnt) { // cnt : 현재까지 처리한 원소개수
+        if(cnt == N) {
+            int sum = 0;
+            for(int i = 0; i < N; i++) {
+                if(!isSelected[i]) continue;
+                sum += nums[i];
+            }
+            if(sum == S) ans++;
+            return;
+        }
+
+        isSelected[cnt] = true;
+        subset(cnt+1);
+        isSelected[cnt] = false;
+        subset(cnt+1);
+    }
 }
