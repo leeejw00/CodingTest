@@ -6,22 +6,12 @@ class Solution {
         int[] b = {2, 1, 2, 3, 2, 4, 2, 5};
         int[] c = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
 
-        int[] aAns = new int[answers.length];
-        int[] bAns = new int[answers.length];
-        int[] cAns = new int[answers.length];
-
-        for(int i = 0; i < answers.length; i++) {
-            aAns[i] = a[i % 5];
-            bAns[i] = b[i % 8];
-            cAns[i] = c[i % 10];
-        }
-
         int aCnt = 0, bCnt = 0, cCnt = 0;
         int max = -1;
         for(int i = 0; i < answers.length; i++) {
-            if(aAns[i] == answers[i]) aCnt++;
-            if(bAns[i] == answers[i]) bCnt++;
-            if(cAns[i] == answers[i]) cCnt++;
+            if(a[i % 5] == answers[i]) aCnt++;
+            if(b[i % 8] == answers[i]) bCnt++;
+            if(c[i % 10] == answers[i]) cCnt++;
         }
 
         max = Math.max(aCnt, bCnt);
