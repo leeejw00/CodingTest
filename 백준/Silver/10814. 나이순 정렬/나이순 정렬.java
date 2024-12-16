@@ -10,29 +10,44 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
 
-        String[][] arr = new String[n][2];
+        Person[] p = new Person[n];
+
         for(int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            for(int j = 0; j < 2; j++) {
-                arr[i][j] = st.nextToken();
-            }
+            int age = Integer.parseInt(st.nextToken());
+            String name = st.nextToken();
+            p[i] = new Person(age, name);
         }
 
-        Arrays.sort(arr, new Comparator<String[]>() {
+        Arrays.sort(p, new Comparator<Person>() {
             @Override
-            public int compare(String[] o1, String[] o2) {
-                return Integer.parseInt(o1[0]) - Integer.parseInt(o2[0]);
+            public int compare(Person o1, Person o2) {
+                return o1.age - o2.age;
             }
         });
 
         StringBuilder sb = new StringBuilder();
+
         for(int i = 0; i < n; i++) {
-            for(int j = 0; j < 2; j++) {
-                sb.append(arr[i][j]).append(" ");
-            }
-            sb.append('\n');
+            // 객체배열의 객체를 출력하면 해당 인덱스의 객체의 toString() 이 출력 됨
+            sb.append(p[i]);
         }
 
         System.out.println(sb);
+    }
+
+    public static class Person {
+        int age;
+        String name;
+
+        public Person(int age, String name) {
+            this.age = age;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return age + " " + name + "\n";
+        }
     }
 }
