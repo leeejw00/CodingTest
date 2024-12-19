@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -9,32 +10,32 @@ public class Main {
         int T = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < T; i++) {
+        for(int t = 0; t < T; t++) {
             Stack<Character> stack = new Stack<>();
 
-            String shapes = br.readLine();
-            for(int a = 0; a < shapes.length(); a++) {
-                char currShape = shapes.charAt(a);
+            String str = br.readLine();
 
-                if(currShape == '(') {
-                    stack.push(currShape);
+            String ans = "YES";
+            for(int i = 0; i < str.length(); i++) {
+                if(str.charAt(i) == ')') {
+                    if(!stack.isEmpty() && stack.peek() == '(') {
+                        stack.pop();
+                    } else {
+                        ans = "NO";
+                        break;
+                    }
                 }
-                else if(currShape == ')') {
-                   if(stack.isEmpty()) {
-                       stack.push('N');
-                       break;
-                   }
-                   else if(stack.peek() == '(')
-                       stack.pop();
+                else {
+                    stack.push(str.charAt(i));
                 }
             }
 
-            if(stack.isEmpty())
-                sb.append("YES");
-            else
-                sb.append("NO");
-            sb.append('\n');
+            if(!stack.isEmpty())
+                ans = "NO";
+
+            sb.append(ans).append("\n");
         }
+
         System.out.println(sb);
     }
 }
