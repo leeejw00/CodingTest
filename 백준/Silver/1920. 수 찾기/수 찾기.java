@@ -1,34 +1,54 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		
-		int n = Integer.parseInt(br.readLine());
-		Set<Integer> set = new HashSet<Integer>();
-		st = new StringTokenizer(br.readLine());
-		for(int i=0; i<n; i++) {
-			int num = Integer.parseInt(st.nextToken());
-			set.add(num);
-		}
-		
-		int m = Integer.parseInt(br.readLine());
-		st = new StringTokenizer(br.readLine());
-		for(int i=0; i<m; i++) {
-			int num2 = Integer.parseInt(st.nextToken());
-			if(set.contains(num2))
-				sb.append(1 + "\n");
-			else
-				sb.append(0 + "\n");
-		}
-		
-		System.out.println(sb);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+
+        int M = Integer.parseInt(br.readLine());
+        int[] target = new int[M];
+
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0; i < M; i++) {
+            target[i] = Integer.parseInt(st.nextToken());
+        }
+
+        // arr 배열 정렬
+        Arrays.sort(arr);
+
+        // 이분탐색
+        for(int i = 0; i < M; i++) {
+            if(BinarySearch(arr, target[i]) != -1)
+                System.out.println(1);
+            else
+                System.out.println(0);
+        }
+    }
+
+    static int BinarySearch(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length - 1;
+        int mid;
+
+        while (left <= right) {
+            mid = (left + right) / 2;
+
+            if(arr[mid] < target) left = mid + 1;
+            else if (arr[mid] > target) right = mid - 1;
+            else return mid; // mid == target
+        }
+
+        // 찾는 값이 없는 경우
+        return -1;
+    }
 }
