@@ -1,31 +1,45 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        int cnt = N;
-        for(int i=0; i<N; i++) {
-            String word = br.readLine();
-            boolean[] check = new boolean[26];
-            check[word.charAt(0) - 97] = true;
+        String[] arr = new String[N];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = br.readLine();
+        }
 
-            for(int j=1; j<word.length(); j++) {
-                char curr = word.charAt(j);
-                if(curr == word.charAt(j-1)) continue;
+        HashMap<Character, Boolean> map;
+        int ans = N;
 
-                if(check[curr - 97]) {
-                    cnt--;
+        for (String str : arr) {
+            map = new HashMap<>();
+
+            // 단어의 첫 글자 map에 넣어주기
+            char beforeWord = str.charAt(0);
+            map.put(beforeWord, true);
+
+            // 다음 글자부터 이전 글자와 비교하며 확인
+            for (int i = 1; i < str.length(); i++) {
+
+                // 현재 글자가 map에 없다면 안나왔던 단어이므로 map에 넣어주기
+                if (!map.containsKey(str.charAt(i))) {
+                    map.put(str.charAt(i), true);
+                    beforeWord = str.charAt(i);
+                }
+
+                // 현재 글자가 map에 있고 바로 전 글자와 다르다면 그룹단어 x
+                else if (str.charAt(i) != beforeWord){
+                    ans--;
                     break;
-                } else {
-                    check[curr - 97] = true;
                 }
             }
         }
-        System.out.println(cnt);
+
+        System.out.println(ans);
     }
 }
