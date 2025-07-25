@@ -2,57 +2,71 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
         int T = Integer.parseInt(br.readLine());
 
-        for(int t = 0; t < T; t++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int N = Integer.parseInt(st.nextToken()); // 문서 개수
-            int M = Integer.parseInt(st.nextToken()); // 내 문서 위치
-
-            LinkedList<int[]> queue = new LinkedList<>();
+        for (int t = 0; t < T; t++) {
+            Queue<int []> q = new LinkedList<>(); // {중요도값, target인지 아닌지 (1,0)}
+            int[] importance = new int[10]; // 중요도 카운트 (1~9)
 
             st = new StringTokenizer(br.readLine());
-            for(int i = 0; i < N; i++) {
-                queue.offer(new int[] {i, Integer.parseInt(st.nextToken()) }); // { 초기 위치, 중요도 }
+            int N = Integer.parseInt(st.nextToken()); 
+            int target = Integer.parseInt(st.nextToken()); 
+
+            st = new StringTokenizer(br.readLine());
+            for (int i = 0; i < N; i++) {
+                int num = Integer.parseInt(st.nextToken()); // 중요도값
+                importance[num]++;
+
+                // target이면 1 아니면 0
+                int isTarget = 0;
+                if (i == target) isTarget = 1;
+
+                // 큐에 문서 넣어주기
+                q.offer(new int[] {num, isTarget});
             }
 
-            int print = 0; // 인쇄 횟수
-            while(!queue.isEmpty()) {
-
-                int[] front = queue.poll(); // 첫 원소 뽑기
-                boolean isMax = true; // 첫 원소가 가장 큰 원소인지 판단하는 변수
-
-                // 큐에 남아있는 원소들과 중요도 비교
-                for(int i = 0; i < queue.size(); i++) {
-                    // 처음 뽑은 원소보다 큐에 있는 i번쨰 원소가 중요도가 더 클 경우
-                    if(front[1] < queue.get(i)[1]) {
-
-                        // 뽑은 원소 및 i 이전의 원소들을 뒤로 보내기
-                        queue.offer(front);
-                        for(int j = 0; j < i; j++) {
-                            queue.offer(queue.poll());
-                        }
-
-                        // front 원소가 가장 큰 원소가 아니었으므로 false를 하고 탐색 마침
-                        isMax = false;
+            // 문서 중요도에 맞추어 출력
+            int cnt = 0; 
+            int importNum = 9;
+            while (!q.isEmpty()) {
+                // 현재 가장 높은 중요도 수 구하기
+                for (int i = 9; i > 0; i--) {
+                    if (importance[i] > 0) {
+                        importNum = i;
                         break;
                     }
                 }
-                // front 원소가 가장 큰 원소가 아니었으므로 다음 반복문으로 넘어감
-                if(!isMax) continue;
 
-                // front 원소가 가장 큰 원소였으므로 해당 원소 출력 (위 if문에 모두 걸리지 않았다면 가장 큰 원소인 것)
-                print++;
+                // 중요도와 지금 꺼낼 큐의 값이 같으면 꺼내고, 아니면 뒤로 보내기
+                int[] curr = q.poll();
+                int num = curr[0];
+                int isTarget = curr[1];
 
-                if(front[0] == M) break; // 이 때, 출력한 원소가 찾고자 하는 문서인지 확인 후 맞다면 종료
+                // 현재 중요도 문서 아니라면 뒤로 보내기
+                if (num != importNum) {
+                    q.offer(new int[] {num, isTarget});
+                }
+
+                // 현재 중요도라면 꺼내고, 타겟이라면 break
+                else {
+                    cnt++;
+                    importance[importNum]--;
+
+                    if (isTarget == 1) {
+                        break;
+                    }
+                }
             }
 
-            System.out.println(print);
-        }
+            System.out.println(cnt);
+        } // tc
     }
 }
