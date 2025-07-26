@@ -2,28 +2,21 @@
 # FROM USED_GOODS_BOARD
 # WHERE STATUS = 'DONE'
 # GROUP BY WRITER_ID
-# HAVING SUM(PRICE) >= 700000
+# HAVING SUM(PRICE) >= 700000 -> 서브쿼리
 
-SELECT u.USER_ID, U.NICKNAME ,SUM(b.PRICE) AS TOTAL_SALES
+SELECT u.USER_ID, u.NICKNAME ,SUM(b.PRICE) AS TOTAL_SALES
 FROM USED_GOODS_BOARD b
 JOIN USED_GOODS_USER u
 ON b.WRITER_ID = u.USER_ID
-WHERE b.WRITER_ID IN (SELECT WRITER_ID
-                        FROM USED_GOODS_BOARD
-                        WHERE STATUS = 'DONE'
-                        GROUP BY WRITER_ID
-                        HAVING SUM(PRICE) >= 700000)
-    AND STATUS = 'DONE'
+WHERE STATUS = 'DONE'
 GROUP BY u.USER_ID
+HAVING SUM(PRICE) >= 700000
 ORDER BY TOTAL_SALES
-
-
 
 /*
 1. 완료된 금액의 합이 70만 이상인 사람들의 아이디 서브쿼리로 추출
 2. 조인한 테이블 이용해서 
 */
-
 
 /*
 완료된(status=done) 중고 거래의 총금액이 70만 원 이상인 사람의 
