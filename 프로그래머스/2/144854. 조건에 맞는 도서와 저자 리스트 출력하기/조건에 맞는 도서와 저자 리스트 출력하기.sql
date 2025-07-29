@@ -1,0 +1,13 @@
+SELECT b.BOOK_ID, a.AUTHOR_NAME, DATE_FORMAT(b.PUBLISHED_DATE, "%Y-%m-%d") AS 'PUBLISHED_DATE'
+FROM BOOK b
+JOIN AUTHOR a 
+ON b.AUTHOR_ID = a.AUTHOR_ID
+WHERE CATEGORY = '경제'
+ORDER BY b.PUBLISHED_DATE
+
+
+/*
+'경제' 카테고리에 속하는 도서들의 
+도서 ID(BOOK_ID), 저자명(AUTHOR_NAME), 출판일(PUBLISHED_DATE) 리스트를 출력
+출판일을 기준으로 오름차순 
+*/
